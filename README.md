@@ -19,8 +19,11 @@ With the following addition, you will get a red dot that symbolizes the position
 </html>    
 ```
 
-## Further work
-1) Add methods to retreive actual coordinates (not just having red dot)
+## Debug mode
+When no TobiiEye server is found, the script changes to debug mode and uses the mouse position as eye coordinates.
+
+## Use coordinates
+To the eye coordinates, you can fetch them with the method `getLastCoords()` which returns a two-sized array with the last recorded x and y coordinates.
 
 ## Contributors
 

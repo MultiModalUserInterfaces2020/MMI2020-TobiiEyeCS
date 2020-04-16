@@ -1,5 +1,6 @@
 //var indicator = document.getElementById("indicator");
 var offsetX = 0.0, offsetY = 0.0;
+var lastX = 0.0, lastY = 0.0;
 var debug = false;
 
 
@@ -10,7 +11,6 @@ websocket.onopen = function (e) { };
 websocket.onclose = function (e) { };
 websocket.onerror = function (e) {
 	debugMode(true);
-	console.log(debug)
 };
 
 websocket.onmessage = function (e) {
@@ -20,9 +20,15 @@ websocket.onmessage = function (e) {
 	}
 };
 
-function moveIndicator(x,y) {
+function updateLastCoords(x,y) {
+	lastX = x;
+	lastY = y;
 	indicator.style.left=x;
     indicator.style.top=y;
+}
+
+function getLastCoords() {
+	return [lastX,lastY];
 }
 
 function applyCoordinates(coords) {
@@ -42,15 +48,15 @@ function applyCoordinates(coords) {
 	var newX = coords[0] * tracked_values.screen_width - tracked_values.calculated_viewport_x + offsetX;
     var newY = coords[1] * tracked_values.screen_height - tracked_values.calculated_viewport_y + offsetY;
     
-    moveIndicator(newX,newY);
+    updateLastCoords(newX,newY);
 }
 
 function debugMode(isDebug) {
 	debug = isDebug;
 	if(debug) {
-		document.addEventListener('mousemove', e => moveIndicator(e.pageX,e.pageY));
+		document.addEventListener('mousemove', e => updateLastCoords(e.pageX,e.pageY));
 	} else {
-		document.removeEventListener('mousemove', e => moveIndicator(e.pageX,e.pageY));
+		document.removeEventListener('mousemove', e => updateLastCoords(e.pageX,e.pageY));
 	}
 }
 

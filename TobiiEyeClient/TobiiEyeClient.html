@@ -1,7 +1,16 @@
 <html>
     <title>state machine gaze webtracker test</title>
     <body style="margin:0px">
+		<p id="pEle">Last requested coords: </p>
         <div id="indicator" style="width:10px; height:12px; background-color:red; position:fixed; border-radius: 5px;"></div>
 		<script type="text/javascript" src="./js/TobiiEyeClient.js"></script>
+		<script>
+			let pEle = document.getElementById("pEle");
+			document.onclick = function(){
+				// gets the last coordinates from TobiiServer
+				let coord = getLastCoords();
+				pEle.innerHTML = "Last requested coords: " + coord[0] + " | " + coord[1];
+			};			
+		</script>
     </body>
 </html>    

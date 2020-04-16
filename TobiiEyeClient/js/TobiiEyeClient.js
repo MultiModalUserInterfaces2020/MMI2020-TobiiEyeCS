@@ -1,26 +1,27 @@
+//var indicator = document.getElementById("indicator");
+var offsetX = 0.0, offsetY = 0.0;
+var debug = false;
+
+
 var wsUri = "ws://127.0.0.1:8181/";
 var websocket = new WebSocket(wsUri);
-var indicator = document.getElementById("indicator");
-var offsetX = 0.0, offsetY = 0.0;
 
-websocket.onopen = function (e) {
-    
-};
-
-websocket.onclose = function (e) {
-    
+websocket.onopen = function (e) { };
+websocket.onclose = function (e) { };
+websocket.onerror = function (e) {
+	debugMode(true);
+	console.log(debug)
 };
 
 websocket.onmessage = function (e) {
-    applyCoordinates(e.data);
+	if(!debug) {
+		var coords = e.data.split(";");
+		applyCoordinates(coords);
+	}
 };
 
-websocket.onerror = function (e) {
-    
-};
 
-function applyCoordinates(message) {
-    var coords = message.split(";");
+function applyCoordinates(coords) {
     var tracked_values ={
         browser_x : Mir_windowTools.get_browserweb_coordinates().x,
         browser_y : Mir_windowTools.get_browserweb_coordinates().y,
@@ -39,6 +40,26 @@ function applyCoordinates(message) {
     
     indicator.style.left=newX;
     indicator.style.top=newY;
+}
+
+function debugMode(isDebug) {
+	debug = isDebug;
+	if(debug) {
+		document.addEventListener('DOMContentLoaded', function() {
+			document.addEventListener('mousemove', function(e) {
+				indicator.style.left=e.pageX;
+				indicator.style.top=e.pageY;
+				console.log(e.pageX+"|"+e.pageY);
+			}, true);
+		}, false);
+		
+	} else {
+		//document.removeEventListener('mousemove', function(e) {
+		//	indicator.style.left=e.pageX;
+		//	indicator.style.top=e.pageY;
+		//	console.log(e.pageX+"|"+e.pageY);
+		//}, true);
+	}
 }
 
 // TOOLS for position transpose

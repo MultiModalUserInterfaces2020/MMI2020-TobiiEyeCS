@@ -20,6 +20,10 @@ websocket.onmessage = function (e) {
 	}
 };
 
+function moveIndicator(x,y) {
+	indicator.style.left=x;
+    indicator.style.top=y;
+}
 
 function applyCoordinates(coords) {
     var tracked_values ={
@@ -38,27 +42,15 @@ function applyCoordinates(coords) {
 	var newX = coords[0] * tracked_values.screen_width - tracked_values.calculated_viewport_x + offsetX;
     var newY = coords[1] * tracked_values.screen_height - tracked_values.calculated_viewport_y + offsetY;
     
-    indicator.style.left=newX;
-    indicator.style.top=newY;
+    moveIndicator(newX,newY);
 }
 
 function debugMode(isDebug) {
 	debug = isDebug;
 	if(debug) {
-		document.addEventListener('DOMContentLoaded', function() {
-			document.addEventListener('mousemove', function(e) {
-				indicator.style.left=e.pageX;
-				indicator.style.top=e.pageY;
-				console.log(e.pageX+"|"+e.pageY);
-			}, true);
-		}, false);
-		
+		document.addEventListener('mousemove', e => moveIndicator(e.pageX,e.pageY));
 	} else {
-		//document.removeEventListener('mousemove', function(e) {
-		//	indicator.style.left=e.pageX;
-		//	indicator.style.top=e.pageY;
-		//	console.log(e.pageX+"|"+e.pageY);
-		//}, true);
+		document.removeEventListener('mousemove', e => moveIndicator(e.pageX,e.pageY));
 	}
 }
 
